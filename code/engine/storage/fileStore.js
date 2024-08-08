@@ -62,8 +62,8 @@ window.fileStore = new (function(){
 			}
 			xml.send();
 		} else {
-			alert("You need to supply MKJS with a Mario Kart DS ROM to function. Click anywhere on the page to load a file.")
 			fileCallback = callback;
+			document.getElementById("romBlink").innerHTML = "You need to supply MKJS with a Mario Kart DS ROM to function. </br> Click anywhere on the page to load a file.";
 			document.getElementById("fileIn").onchange = fileInChange;
 			waitForROM = true;
 		}
@@ -74,6 +74,7 @@ window.fileStore = new (function(){
 		var bReader = new FileReader();
 		bReader.onload = function(e) {
 			waitForROM = false; //todo: verify
+			document.getElementById("romBlink").innerHTML = "";
 			storeGame(e.target.result, fileCallback);
 		};
 		bReader.readAsArrayBuffer(bFile);
