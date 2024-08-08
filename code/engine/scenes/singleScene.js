@@ -63,7 +63,13 @@ window.singleScene = function(course, wsInstance, res) {
 
 	function setUpCourse(mainNarc, texNarc, course) {
 		var chars = [];
-		chars.push({charN:mchar, kartN:mkart, controller:((window.prompt("press y for cpu controlled") == "y")?controlRaceCPU:getPlayerControls()), raceCam:true, extraParams:[{k:"name", v:"single"}, {k:"active", v:true}]});
+		chars.push({
+			charN:mchar, 
+			kartN:mkart, 
+			controller:((false)?controlRaceCPU:getPlayerControls()), // TODO: Reimplement CPU Control - window.prompt("press y for cpu controlled") == "y"
+			raceCam:true, 
+			extraParams:[{k:"name", v:"single"}, {k:"active", v:true}]
+		});
 
 		for (var i=0; i<7; i++) {
 			var tchar = Math.floor(Math.random()*12);
@@ -81,6 +87,7 @@ window.singleScene = function(course, wsInstance, res) {
 			frameDiv:0,
 		}
 		t.activeScene.updateMode(t.mode);
+		document.getElementById("gradientBG").style.zIndex = -1
 	}
 
 }

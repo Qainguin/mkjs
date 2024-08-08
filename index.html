@@ -116,6 +116,8 @@
 		var mobile = (function(a,b){if(/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino/i.test(a)||/1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(a.substr(0,4)))return true})(navigator.userAgent||navigator.vendor||window.opera);
 		var mainRT;
 		var waitForROM = false;
+		var waitForCourse = false;
+		var courseNum;
 
 		window.onload = function(argument) {
 			window.simpleMatStack = {dat:mat4.create(), built:true};
@@ -146,22 +148,29 @@
 		}
 
 		function init() {
+			console.log("Initializing...")
 			var canvas = document.getElementById("canvas3d");
 			canvas.addEventListener("click", lockPtr);
 			fileStore.requestGameFiles(initNitro);
 		}
 
 		function initNitro(rom) {
+			console.log("Initializing Nitro...")
+
 			gl = initGL(document.getElementById("canvas3d"));
-			gameROM = new ndsFS(rom);
+			console.log("Initializing WebGL...")
 
 			nitroRender.init(gl);
 			shadowRender.init(gl);
 			sceneDrawer.init(gl);
 			objDatabase.init();
 
+			gameROM = new ndsFS(rom);
+
+			console.log("Initializing Audio...")
 			nitroAudio.init(new sdat(gameROM.getFile("/data/Sound/sound_data.sdat")));
 
+			console.log("Setting up Audio...")
 			var ctx = nitroAudio.ctx;
 				buf = ctx.createBuffer(1, 1, 44000);
 				osc = ctx.createBufferSource();
@@ -189,39 +198,47 @@
 					osc.donezo = true;
 				}
 			});
-			//mainScene = new clientScene("ws://192.168.1.13:8081", 0, res)
-			mainScene = new singleScene("mkds/"+window.prompt("Select a course to load. (0 to 31, eg rainbow road = 15)"), 0, res)
 
+			waitForCourse = true;
+			document.getElementById("courses").style.visibility = "visible";
+			var checkWaitForCourse = setInterval(function() {
+				if (!waitForCourse) {
+					clearInterval(checkWaitForCourse);
 
-			//load course
-			/*var cDir = MKDSCONST.COURSEDIR+MKDSCONST.COURSES[window.prompt("Select a course to load. (0 to 31, eg rainbow road = 15)")]
+					// Now initialize the mainScene
+					// mainScene = new clientScene("ws://192.168.1.13:8081", 0, res);
+					mainScene = new singleScene("mkds/" + courseNum, 0, res);
 
-			//var cDir = MKDSCONST.COURSEDIR+MKDSCONST.COURSES[1];
+					// Continue with the rest of your code
+					// load course
+					/* var cDir = MKDSCONST.COURSEDIR + MKDSCONST.COURSES[window.prompt("Select a course to load. (0 to 31, eg rainbow road = 15)")];
 
-			var mainNarc = new narc(lz77.decompress(files["snow_course.carc"]));
-			var texNarc = new narc(lz77.decompress(files["snow_courseTex.carc"]));
+					// var cDir = MKDSCONST.COURSEDIR + MKDSCONST.COURSES[1];
 
-			//var mainNarc = new narc(lz77.decompress(gameROM.getFile(cDir+".carc")));
-			//var texNarc = new narc(lz77.decompress(gameROM.getFile(cDir+"Tex.carc")));
+					var mainNarc = new narc(lz77.decompress(files["snow_course.carc"]));
+					var texNarc = new narc(lz77.decompress(files["snow_courseTex.carc"]));
 
-			var chars = [];
-			for (var i=0; i<31; i++) {
-				chars.push({charN:Math.floor(Math.random()*12), kartN:Math.floor(Math.random()*0x24), controller:controlRaceCPU, raceCam:false});
-			}
-			chars.push({charN:Math.floor(Math.random()*12), kartN:Math.floor(Math.random()*0x24), controller:((prompt("Type y to gain control of last kart.")=="y")?controlDefault:controlRaceCPU), raceCam:true})
+					// var mainNarc = new narc(lz77.decompress(gameROM.getFile(cDir + ".carc")));
+					// var texNarc = new narc(lz77.decompress(gameROM.getFile(cDir + "Tex.carc")));
 
-				mainScene = new courseScene(mainNarc, texNarc, 
-				chars, {}, res);
+					var chars = [];
+					for (var i = 0; i < 31; i++) {
+						chars.push({ charN: Math.floor(Math.random() * 12), kartN: Math.floor(Math.random() * 0x24), controller: controlRaceCPU, raceCam: false });
+					}
+					chars.push({
+						charN: Math.floor(Math.random() * 12),
+						kartN: Math.floor(Math.random() * 0x24),
+						controller: (prompt("Type y to gain control of last kart.") == "y") ? controlDefault : controlRaceCPU,
+						raceCam: true
+					});
 
-			//var cDir = MKDSCONST.COURSEDIR+MKDSCONST.COURSES[12];
-			//var mainNarc = new narc(lz77.decompress(gameROM.getFile(cDir+".carc")));
-			//var texNarc = new narc(lz77.decompress(gameROM.getFile(cDir+"Tex.carc")));
+					mainScene = new courseScene(mainNarc, texNarc,
+						chars, {}, res); */
 
-			//	mainScene2 = new courseScene(mainNarc, texNarc, 
-			//	chars, {}, res);*/
-
-			big();
-			render();
+					big();
+					render();
+				}
+			}, 100); // Check every 100ms
 		}
 
 		var keysArray = new Array(255);
@@ -230,27 +247,31 @@
 		var timeSync = 0;
 		var lastTime = Date.now();
 		function render() {
-			timeSync += Date.now()-lastTime;
-			lastTime = Date.now();
-			big();
+			if (!waitForCourse) {
+				timeSync += Date.now()-lastTime;
+				lastTime = Date.now();
+				big();
 
-			gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
-			gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT | gl.STENCIL_BUFFER_BIT);
+				gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
+				gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT | gl.STENCIL_BUFFER_BIT);
 
-			while (timeSync>0) {
-				mainScene.update();
-				processTouches();
-				if (timeSync > 1000) timeSync = 1000; //don't run way too many frames.
-				timeSync -= 1000/60;
-			}
+				while (timeSync>0) {
+					mainScene.update();
+					processTouches();
+					if (timeSync > 1000) timeSync = 1000; //don't run way too many frames.
+					timeSync -= 1000/60;
+				}
+				
+				
+				nitroAudio.tick();
+				//mainScene2.update();
+
+				mainScene.render();
+				//sceneDrawer.drawWithShadow(gl, mainScene2, gl.viewportWidth/2, 0, gl.viewportWidth/2, gl.viewportHeight)
+
 			
-			nitroAudio.tick();
-			//mainScene2.update();
-
-			mainScene.render();
-			//sceneDrawer.drawWithShadow(gl, mainScene2, gl.viewportWidth/2, 0, gl.viewportWidth/2, gl.viewportHeight)
-
-			window.requestAnimationFrame(render);
+				window.requestAnimationFrame(render);
+			}
 		}
 
 		function keyDown(e) {
@@ -385,6 +406,18 @@
 			gl.viewportWidth = element.width;
 			gl.viewportHeight = element.height;
 		}
+		
+		function chooseCourse(course) {
+			console.log("Chose Course " + course);
+			var courses = document.getElementById("courses");
+			var gradientBG = document.getElementById("gradientBG");
+			courses.style.visibility = "hidden";
+			courses.style.pointerEvents = "none";
+			courseNum = course;
+			waitForCourse = false;
+		}
+
+
 	</script>
 
 	<style>
@@ -413,9 +446,9 @@
 			width: 100vw;
 			height: 100vh;
 			background: rgb(255,231,0);
-			background: linear-gradient(0deg, rgba(255,231,0,1) 0%, rgba(255,196,0,1) 100%);
+			background: linear-gradient(0deg, #ffe700 0%, #ffc400 100%);
 			position: fixed;
-			z-index: -100;
+			z-index: 1;
 			pointer-events: none;
 		}
 
@@ -426,21 +459,109 @@
 			background-size: 72px 72px;
 			background-position: 0 0, 0 36px, 36px -36px, -36px 0px;
 			position: fixed;
-			z-index: -1;
+			z-index: 2;
 			pointer-events: none;
 		}
+
+		#courses {
+			width: 100vw; /* Full viewport width */
+			height: 100vh; /* Full viewport height */
+			position: fixed;
+			z-index: 3;
+			display: grid;
+			place-items: center;
+			grid-template-columns: repeat(auto-fit, minmax(256px, 1fr)); /* Adjust minimum column width */
+			grid-auto-rows: minmax(192px, auto); /* Rows adapt based on content */
+			gap: 15px; /* Increase space between grid items */
+			padding: 10px; /* Padding inside the container */
+			box-sizing: border-box; /* Include padding and border in element's total width and height */
+			overflow-y: auto; /* Vertical scroll if content exceeds viewport height */
+			overflow-x: hidden; /* Hide horizontal overflow */
+			visibility: hidden;
+		}
+
+
+		#courses::-webkit-scrollbar {
+    		width: 12px; /* Width of the scrollbar */
+		}
+
+		#courses::-webkit-scrollbar-thumb {
+			background-color: #40C9A2; /* Color of the scrollbar handle */
+			border-radius: 10px; /* Round the corners of the scrollbar handle */
+			border: 3px solid #2F9C95; /* Background color for the scrollbar track */
+		}
+
+		#courses::-webkit-scrollbar-track {
+			background-color: #2F9C95; /* Background color of the scrollbar track */
+			border-radius: 0px; /* Round the corners of the scrollbar track */
+		}
+
+
+		.courseCard {
+			all: unset;
+			width: 224px;
+			height: 168px;
+			background-size: cover;
+			image-rendering: pixelated;
+			border: 3px solid rgb(255, 196, 0);
+			border-radius: 8px;
+			transform-origin: center;
+			transition: 0.3s ease;
+			box-sizing: border-box;
+		}
+
+		.courseCard:hover {
+			border: 3px solid rgb(200, 155, 0);
+			transform: scale(1.05);
+		}
+
 	</style>
 
 </head>
 
 <body style="margin:0; background-color:black; color: black; font-family: 'NDS';">
 
+	<div id="gradientBG">
+		<div id="checkerboard"></div>
+	</div>
+
 	<div style="display: grid; place-items: center; width: 100vw; height: 100vh; position: fixed; z-index: 100; pointer-events: none;">
 		<p id="romBlink" style="font-size: 48px; text-align: center; animation: blink 2s infinite;"></p>
 	</div>
 
-	<div id="gradientBG">
-		<div id="checkerboard"></div>
+	<div id="courses">
+		<button onclick="chooseCourse(0)" class="courseCard" style="background-image: url('resource/screenshots/0.png');"></button>
+		<button onclick="chooseCourse(1)" class="courseCard" style="background-image: url('resource/screenshots/1.png');"></button>
+		<button onclick="chooseCourse(2)" class="courseCard" style="background-image: url('resource/screenshots/2.png');"></button>
+		<button onclick="chooseCourse(3)" class="courseCard" style="background-image: url('resource/screenshots/3.png');"></button>
+		<button onclick="chooseCourse(4)" class="courseCard" style="background-image: url('resource/screenshots/4.png');"></button>
+		<button onclick="chooseCourse(5)" class="courseCard" style="background-image: url('resource/screenshots/5.png');"></button>
+		<button onclick="chooseCourse(6)" class="courseCard" style="background-image: url('resource/screenshots/6.png');"></button>
+		<button onclick="chooseCourse(7)" class="courseCard" style="background-image: url('resource/screenshots/7.png');"></button>
+		<button onclick="chooseCourse(8)" class="courseCard" style="background-image: url('resource/screenshots/8.png');"></button>
+		<button onclick="chooseCourse(9)" class="courseCard" style="background-image: url('resource/screenshots/9.png');"></button>
+		<button onclick="chooseCourse(10)" class="courseCard" style="background-image: url('resource/screenshots/10.png');"></button>
+		<button onclick="chooseCourse(11)" class="courseCard" style="background-image: url('resource/screenshots/11.png');"></button>
+		<button onclick="chooseCourse(12)" class="courseCard" style="background-image: url('resource/screenshots/12.png');"></button>
+		<button onclick="chooseCourse(13)" class="courseCard" style="background-image: url('resource/screenshots/13.png');"></button>
+		<button onclick="chooseCourse(14)" class="courseCard" style="background-image: url('resource/screenshots/14.png');"></button>
+		<button onclick="chooseCourse(15)" class="courseCard" style="background-image: url('resource/screenshots/15.png');"></button>
+		<button onclick="chooseCourse(16)" class="courseCard" style="background-image: url('resource/screenshots/16.png');"></button>
+		<button onclick="chooseCourse(17)" class="courseCard" style="background-image: url('resource/screenshots/17.png');"></button>
+		<button onclick="chooseCourse(18)" class="courseCard" style="background-image: url('resource/screenshots/18.png');"></button>
+		<button onclick="chooseCourse(19)" class="courseCard" style="background-image: url('resource/screenshots/19.png');"></button>
+		<button onclick="chooseCourse(20)" class="courseCard" style="background-image: url('resource/screenshots/20.png');"></button>
+		<button onclick="chooseCourse(21)" class="courseCard" style="background-image: url('resource/screenshots/21.png');"></button>
+		<button onclick="chooseCourse(22)" class="courseCard" style="background-image: url('resource/screenshots/22.png');"></button>
+		<button onclick="chooseCourse(23)" class="courseCard" style="background-image: url('resource/screenshots/23.png');"></button>
+		<button onclick="chooseCourse(24)" class="courseCard" style="background-image: url('resource/screenshots/24.png');"></button>
+		<button onclick="chooseCourse(25)" class="courseCard" style="background-image: url('resource/screenshots/25.png');"></button>
+		<button onclick="chooseCourse(26)" class="courseCard" style="background-image: url('resource/screenshots/26.png');"></button>
+		<button onclick="chooseCourse(27)" class="courseCard" style="background-image: url('resource/screenshots/27.png');"></button>
+		<button onclick="chooseCourse(28)" class="courseCard" style="background-image: url('resource/screenshots/28.png');"></button>
+		<button onclick="chooseCourse(29)" class="courseCard" style="background-image: url('resource/screenshots/29.png');"></button>
+		<button onclick="chooseCourse(30)" class="courseCard" style="background-image: url('resource/screenshots/30.png');"></button>
+		<button onclick="chooseCourse(31)" class="courseCard" style="background-image: url('resource/screenshots/31.png');"></button>
 	</div>
 
 	<canvas height="720" width="1280" id="canvas3d" style="width:100%; height:100%;"></canvas>
