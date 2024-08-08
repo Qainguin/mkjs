@@ -62,7 +62,6 @@ window.fileStore = new (function(){
 			}
 			xml.send();
 		} else {
-			alert("You need to supply MKJS with a Mario Kart DS ROM to function. Click anywhere on the page to load a file.")
 			fileCallback = callback;
 			document.getElementById("fileIn").onchange = fileInChange;
 			waitForROM = true;
