@@ -346,6 +346,9 @@
 				osc.start(0);
 				osc.donezo = true;
 			}
+
+			if (!waitForCourse) {e.preventDefault();}
+
 			for (var i=0; i<e.changedTouches.length; i++) {
 				var obj = getTouchObj(e.changedTouches[i]);
 				obj.pressed = true;
@@ -353,6 +356,7 @@
 		}
 
 		function touchEnd(e) {
+			if (!waitForCourse) {e.preventDefault();}
 			for (var i=0; i<e.changedTouches.length; i++) {
 				var obj = getTouchObj(e.changedTouches[i]);
 				obj.released = true;
@@ -360,12 +364,14 @@
 		}
 
 		function touchMove(e) {
+			if (!waitForCourse) {e.preventDefault();}
 			for (var i=0; i<e.changedTouches.length; i++) {
 				var obj = getTouchObj(e.changedTouches[i]);
 			}
 		}
 
 		function touchCancel(e) {
+			if (!waitForCourse) {e.preventDefault();}
 			for (var i=0; i<e.changedTouches.length; i++) {
 				var obj = getTouchObj(e.changedTouches[i]);
 				obj.released = true;
