@@ -1,5 +1,7 @@
 <head>
 
+	<title>mkjs</title>
+
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 	<meta name="apple-mobile-web-app-title" content="mkjs">
@@ -187,6 +189,9 @@
 			document.addEventListener("keydown", keyDown);
 			document.addEventListener("keyup", keyUp);
 
+			window.addEventListener('gamepadconnected', function(e) { console.log('Gamepad connected:', e.gamepad); });
+			window.addEventListener('gamepaddisconnected', function(e) { console.log('Gamepad disconnected:', e.gamepad); });
+
 			document.addEventListener("touchstart", touchStart, { passive: false });
 			document.addEventListener("touchend", touchEnd, { passive: false });
 			document.addEventListener("touchcancel", touchCancel, { passive: false });
@@ -278,6 +283,10 @@
 			e.preventDefault();
 			e.stopPropagation();
 			keysArray[e.keyCode] = true;
+		}
+
+		function buttonDown(e) {
+			e.preventDefault();
 		}
 
 		function keyUp(e) {

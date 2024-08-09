@@ -8,9 +8,14 @@
 //
 
 function getPlayerControls() {
+	if (navigator.getGamepads) {
+		const gamepad = navigator.getGamepads()[0];
+		if (gamepad) return controlGamepad;
+	}
 	if (mobile) return controlMobile;
 	else return controlDefault;
 }
+
 
 window.controlDefault = function() {
 
@@ -36,7 +41,42 @@ window.controlDefault = function() {
 			airTurn: (keysArray[40]?-1:0)+(keysArray[38]?1:0) //air excitebike turn, item fire direction
 		};
 	}
+}
 
+window.controlGamepad = function() {
+	var thisObj = this;
+	this.local = true;
+	var kart;
+
+	this.setKart = function(k) {
+		kart = k;
+		thisObj.kart = k;
+	}
+	this.fetchInput = fetchInput;
+
+	function fetchInput() {
+		var gamepad = navigator.getGamepads()[0];
+
+		if (!gamepad) return {
+			accel: false,
+			decel: false,
+			drift: false,
+			item: false,
+			turn: 0,
+			airTurn: 0
+		};
+
+		return {
+			accel: gamepad.buttons[0].pressed, // A button
+			decel: gamepad.buttons[2].pressed, // B button
+			drift: gamepad.buttons[5].pressed, // X button
+			item: gamepad.buttons[4].pressed, // Y button
+
+			//-1 to 1, intensity.
+			turn: gamepad.axes[0], // Left stick horizontal
+			airTurn: gamepad.axes[1] // Left stick vertical
+		};
+	}
 }
 
 window.controlMobile = function() {
@@ -125,5 +165,4 @@ window.controlMobile = function() {
 			airTurn: itemDir //air excitebike turn, item fire direction
 		};
 	}
-
 }
