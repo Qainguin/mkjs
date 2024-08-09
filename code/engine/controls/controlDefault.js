@@ -30,16 +30,28 @@ window.controlDefault = function() {
 	this.fetchInput = fetchInput;
 
 	function fetchInput() {
-		return {
-			accel: keysArray[88], //x
-			decel: keysArray[90], //z
-			drift: keysArray[83], //s
-			item: keysArray[65], //a
+		if (!isPaused) {
+			return {
+				accel: keysArray[88], //x
+				decel: keysArray[90], //z
+				drift: keysArray[83], //s
+				item: keysArray[65], //a
+	
+				//-1 to 1, intensity.
+				turn: (keysArray[37]?-1:0)+(keysArray[39]?1:0),
+				airTurn: (keysArray[40]?-1:0)+(keysArray[38]?1:0) //air excitebike turn, item fire direction
+			};
+		} else {
+			return {
+				accel: false,
+				decel: false,
+				drift: false,
+				item: false,
 
-			//-1 to 1, intensity.
-			turn: (keysArray[37]?-1:0)+(keysArray[39]?1:0),
-			airTurn: (keysArray[40]?-1:0)+(keysArray[38]?1:0) //air excitebike turn, item fire direction
-		};
+				turn: 0,
+				airTurn: 0
+			}
+		}
 	}
 }
 
