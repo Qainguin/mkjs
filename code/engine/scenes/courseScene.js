@@ -344,7 +344,8 @@ window.courseScene = function(mainNarc, texNarc, courseObj, chars, options, game
 				scn.musicPlayer = nitroAudio.playSound(62, {volume:2}, null);
 			}
 			else if (kart.lapNumber == 4) {
-				lapCounter.style.visibility = "hidden";
+				lapCounter.src = "resource/laps/lap3.png"
+				lapCounter.style.opacity = "0";
 				var finishTuple = [];
 				for (var i=0; i<finishPercents.length; i++) {
 					finishTuple = finishPercents[i];
