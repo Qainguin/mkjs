@@ -335,6 +335,8 @@ window.courseScene = function(mainNarc, texNarc, courseObj, chars, options, game
 		//if the kart is us, play some sounds and show lakitu
 		var winPercent = finishers.length/scn.karts.length;
 		if (kart.local) {
+			var lapCounter = document.getElementById("lapCounter")
+			lapCounter.src = "resource/laps/lap" + kart.lapNumber + ".png"
 			if (kart.lapNumber == 3) {
 				//last lap
 				musicRestartTimer = 0;
@@ -342,6 +344,7 @@ window.courseScene = function(mainNarc, texNarc, courseObj, chars, options, game
 				scn.musicPlayer = nitroAudio.playSound(62, {volume:2}, null);
 			}
 			else if (kart.lapNumber == 4) {
+				lapCounter.style.visibility = "hidden";
 				var finishTuple = [];
 				for (var i=0; i<finishPercents.length; i++) {
 					finishTuple = finishPercents[i];

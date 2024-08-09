@@ -420,6 +420,7 @@
 			console.log("Chose Course " + course);
 			var courses = document.getElementById("courses");
 			var gradientBG = document.getElementById("gradientBG");
+			var lapCounter = document.getElementById("lapCounter");
 			courses.style.visibility = "hidden";
 			courses.style.pointerEvents = "none";
 			courseNum = course;
@@ -524,6 +525,16 @@
 			transform: scale(1.05);
 		}
 
+		#lapCounterContainer {
+			padding: 16px 16px;
+			z-index: 5;
+			position: fixed;
+			image-rendering: pixelated;
+			width: 210px;
+			height: 51px;
+			object-fit: contain;
+		}
+
 	</style>
 
 </head>
@@ -571,6 +582,10 @@
 		<button onclick="chooseCourse(29)" class="courseCard" style="background-image: url('resource/screenshots/29.png');"></button>
 		<button onclick="chooseCourse(30)" class="courseCard" style="background-image: url('resource/screenshots/30.png');"></button>
 		<button onclick="chooseCourse(31)" class="courseCard" style="background-image: url('resource/screenshots/31.png');"></button>
+	</div>
+
+	<div id="lapCounterContainer">
+		<img id="lapCounter" src="resource/laps/lap1.png" style="visibility: hidden;" height="68px" width="280px"></img>
 	</div>
 
 	<canvas height="720" width="1280" id="canvas3d" style="width:100%; height:100%;"></canvas>

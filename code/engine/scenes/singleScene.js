@@ -88,6 +88,7 @@ window.singleScene = function(course, wsInstance, res) {
 		}
 		t.activeScene.updateMode(t.mode);
 		document.getElementById("gradientBG").style.zIndex = -1
+		document.getElementById("lapCounter").style.visibility = "visible";
 	}
 
 }
