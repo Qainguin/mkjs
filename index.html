@@ -300,10 +300,6 @@
 			keysArray[e.keyCode] = true;
 		}
 
-		function buttonDown(e) {
-			e.preventDefault();
-		}
-
 		function keyUp(e) {
 			e.preventDefault();
 			e.stopPropagation();
@@ -350,7 +346,6 @@
 				osc.start(0);
 				osc.donezo = true;
 			}
-			e.preventDefault();
 			for (var i=0; i<e.changedTouches.length; i++) {
 				var obj = getTouchObj(e.changedTouches[i]);
 				obj.pressed = true;
@@ -358,7 +353,6 @@
 		}
 
 		function touchEnd(e) {
-			e.preventDefault();
 			for (var i=0; i<e.changedTouches.length; i++) {
 				var obj = getTouchObj(e.changedTouches[i]);
 				obj.released = true;
@@ -366,14 +360,12 @@
 		}
 
 		function touchMove(e) {
-			e.preventDefault();
 			for (var i=0; i<e.changedTouches.length; i++) {
 				var obj = getTouchObj(e.changedTouches[i]);
 			}
 		}
 
 		function touchCancel(e) {
-			e.preventDefault();
 			for (var i=0; i<e.changedTouches.length; i++) {
 				var obj = getTouchObj(e.changedTouches[i]);
 				obj.released = true;
@@ -505,20 +497,24 @@
 		}
 
 
+		/* Style for the scrollbar itself */
 		#courses::-webkit-scrollbar {
-    		width: 12px; /* Width of the scrollbar */
+			width: 12px; /* Width of the scrollbar */
 		}
 
+		/* Style for the scrollbar thumb (the draggable part) */
 		#courses::-webkit-scrollbar-thumb {
 			background-color: #40C9A2; /* Color of the scrollbar handle */
 			border-radius: 10px; /* Round the corners of the scrollbar handle */
-			border: 3px solid #2F9C95; /* Background color for the scrollbar track */
+			border: 3px solid #2F9C95; /* Border around the scrollbar handle */
 		}
 
+			/* Style for the scrollbar track (the area the thumb moves along) */
 		#courses::-webkit-scrollbar-track {
 			background-color: #2F9C95; /* Background color of the scrollbar track */
 			border-radius: 0px; /* Round the corners of the scrollbar track */
 		}
+
 
 
 		.courseCard {
