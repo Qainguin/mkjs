@@ -62,6 +62,9 @@ window.singleScene = function(course, wsInstance, res) {
 
 
 	function setUpCourse(mainNarc, texNarc, course) {
+		document.getElementById("gradientBG").style.zIndex = -1;
+		document.getElementById("lapCounter").style.visibility = "visible";
+
 		var chars = [];
 		chars.push({
 			charN:mchar, 
@@ -87,8 +90,6 @@ window.singleScene = function(course, wsInstance, res) {
 			frameDiv:0,
 		}
 		t.activeScene.updateMode(t.mode);
-		document.getElementById("gradientBG").style.zIndex = -1
-		document.getElementById("lapCounter").style.visibility = "visible";
 	}
 
 }

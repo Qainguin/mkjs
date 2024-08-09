@@ -418,13 +418,11 @@
 		
 		function chooseCourse(course) {
 			console.log("Chose Course " + course);
-			var courses = document.getElementById("courses");
-			var gradientBG = document.getElementById("gradientBG");
-			var lapCounter = document.getElementById("lapCounter");
-			courses.style.visibility = "hidden";
-			courses.style.pointerEvents = "none";
 			courseNum = course;
 			waitForCourse = false;
+
+			document.getElementById("courses").style.pointerEvents = "none";
+			document.getElementById("courses").style.visibility = "hidden";
 		}
 
 
@@ -488,6 +486,7 @@
 			overflow-y: auto; /* Vertical scroll if content exceeds viewport height */
 			overflow-x: hidden; /* Hide horizontal overflow */
 			visibility: hidden;
+			z-index: 4;
 		}
 
 
@@ -526,12 +525,13 @@
 		}
 
 		#lapCounterContainer {
-			padding: 16px 16px;
+			right: 0;
+			padding: 16px 16px 16px 16px;
 			z-index: 5;
 			position: fixed;
 			image-rendering: pixelated;
-			width: 210px;
-			height: 51px;
+			width: 280px;
+			height: 68px;
 			object-fit: contain;
 		}
 
