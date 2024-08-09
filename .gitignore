@@ -1,5 +1,6 @@
 *.nds
 *.exe
 *.sdat
+.vscode/*
 mongoose.conf
 Code/Engine/col.lua
