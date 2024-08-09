@@ -279,24 +279,14 @@
 			
 				window.requestAnimationFrame(render);
 			}
-		}
-		
-		function togglePause() {
-			isPaused = !isPaused;
-			if (!isPaused) {
-				render();
-				console.log("Unpaused!");
-			} else {
-				console.log("Paused!");
+			if (isPaused) {
+				nitroAudio.killAll();
 			}
 		}
 
 		function keyDown(e) {
 			e.preventDefault();
 			e.stopPropagation();
-			if (e.key == "Escape") {
-				togglePause();
-			}
 			keysArray[e.keyCode] = true;
 		}
 

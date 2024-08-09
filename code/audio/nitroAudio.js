@@ -18,6 +18,7 @@ window.nitroAudio = new (function() {
 	t.kill = kill;
 	t.init = init;
 	t.instaKill = instaKill;
+	t.killAll = killAll;
 	t.updateListener = updateListener;
 
 	t.sdat = null;
@@ -84,9 +85,17 @@ window.nitroAudio = new (function() {
 		t.sounds.splice(ind, 1);
 	}
 
+	function killAll() {
+		for (let s = 0;  s < t.sounds.length; s++) {
+			console.log(t.sounds[s]);
+			instaKill(t.sounds[s]);
+		}
+	}
+	
+	
 	function playSound(seqN, params, arcN, obj) { //if arc is not specified, we just play a normal sequence. this allows 3 overloads. 
 		//obj should have a property "soundProps" where it sets its falloff, position and velocity relative to the oberver occasionally
-		var sound = { dead: false, killing: false, obj: obj };
+		var sound = { dead: false, killing: false, obj: obj, num: seqN };
 
 		var output;
 		if (obj != null) { //if obj is not null then we have a 3d target to assign this sound to.
