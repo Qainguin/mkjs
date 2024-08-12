@@ -53,6 +53,7 @@ window.singleScene = function(course, wsInstance, res) {
 		if (course.substr(0, 5) == "mkds/") {
 			var cnum = Number(course.substr(5));
 			var course = MKDSCONST.COURSES[cnum];
+			if (!course['battle']) { document.getElementById("lapCounter").style.visibility = "visible"; }
 			var cDir = MKDSCONST.COURSEDIR+course.name;
 			var mainNarc = new narc(lz77.decompress(gameROM.getFile(cDir+".carc")));
 			var texNarc = new narc(lz77.decompress(gameROM.getFile(cDir+"Tex.carc")));
@@ -63,7 +64,6 @@ window.singleScene = function(course, wsInstance, res) {
 
 	function setUpCourse(mainNarc, texNarc, course) {
 		document.getElementById("gradientBG").style.zIndex = -1;
-		document.getElementById("lapCounter").style.visibility = "visible";
 
 		var chars = [];
 		chars.push({
