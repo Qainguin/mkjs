@@ -13,7 +13,7 @@ function createCourseButtons() {
 
     if (container) {
         // Loop to create 32 buttons
-        for (let i = 0; i < 32; i++) {
+        for (let i = 0; i < 38; i++) {
             // Create a button element
             const button = document.createElement('button');
 
