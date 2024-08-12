@@ -53,6 +53,7 @@ window.KartItems = function(kart, scene) {
 		if (t.heldItem != null) {
 			t.heldItem.release(input.airTurn);
 		}
+		console.log("item: released");
 		t.heldItem = null;
 		kart.playCharacterSound(7);
 	}
@@ -68,7 +69,8 @@ window.KartItems = function(kart, scene) {
 					if (carouselSfx != null) nitroAudio.kill(carouselSfx);
 
 					//decide on an item
-					var item = "banana"; //koura_g, banana, f_box, koura_group, koura_group-bomb-7
+					var item = MKDSCONST.ITEMS[Math.floor(Math.random() * 4)];
+
 					sfx((specialItems.indexOf(item) == -1) ? 63 : 64);
 					t.currentItem = item;
 				} else {
@@ -81,8 +83,8 @@ window.KartItems = function(kart, scene) {
 				if (pressed) {
 					//fire?
 					t.heldItem = createItem();
-					//t.currentItem = null;
-					//t.empty = true;
+					t.currentItem = null;
+					t.empty = true;
 
 					if (t.heldItem.canBeHeld()) {
 						//begin holding

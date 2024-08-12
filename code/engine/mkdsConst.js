@@ -11,6 +11,13 @@ window.MKDSCONST = new (function() {
 	this.DAMAGE_FLIP = 1;
 	this.DAMAGE_EXPLODE = 2;
 
+	this.ITEMS = [
+		"banana",
+		"f_box",
+		"koura_g",
+		"koura_group"
+	]
+
 	this.COURSEDIR = "/data/Course/";
 
 	this.COURSES = [ //in order of course id, nitro through retro

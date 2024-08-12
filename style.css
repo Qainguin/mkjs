@@ -47,8 +47,8 @@
     z-index: 3;
     display: grid;
     place-items: center;
-    grid-template-columns: repeat(auto-fit, minmax(224px, 1fr)); /* Adjust minimum column width */
     grid-auto-rows: minmax(168px, auto); /* Rows adapt based on content */
+    grid-template-columns: repeat(auto-fit, minmax(224px, 1fr)); /* Adjust minimum column width */
     gap: 15px; /* Increase space between grid items */
     padding: 10px; /* Padding inside the container */
     box-sizing: border-box; /* Include padding and border in element's total width and height */
