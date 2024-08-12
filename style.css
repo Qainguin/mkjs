@@ -1,0 +1,114 @@
+:root {
+    --checker: rgba(255,255,255, 0.3);
+}
+
+@font-face {
+    font-family: "NDS";
+    src: url("resource/NDS.ttf");
+}
+
+@keyframes blink {
+    0% {
+        opacity: 0.25;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0.25;
+    }
+}
+
+#gradientBG {
+    width: 100vw;
+    height: 100vh;
+    background: rgb(255,231,0);
+    background: linear-gradient(0deg, #ffe700 0%, #ffc400 100%);
+    position: fixed;
+    z-index: 1;
+    pointer-events: none;
+}
+
+#checkerboard {
+    width: 100vw;
+    height: 100vh;
+    background-image: linear-gradient(45deg, var(--checker) 25%, transparent 25%), linear-gradient(-45deg, var(--checker) 25%, transparent 25%), linear-gradient(45deg, transparent 75%, var(--checker) 75%), linear-gradient(-45deg, transparent 75%, var(--checker) 75%);
+    background-size: 72px 72px;
+    background-position: 0 0, 0 36px, 36px -36px, -36px 0px;
+    position: fixed;
+    z-index: 2;
+    pointer-events: none;
+}
+
+#courses {
+    width: 100vw; /* Full viewport width */
+    height: 100vh; /* Full viewport height */
+    position: fixed;
+    z-index: 3;
+    display: grid;
+    place-items: center;
+    grid-template-columns: repeat(auto-fit, minmax(224px, 1fr)); /* Adjust minimum column width */
+    grid-auto-rows: minmax(168px, auto); /* Rows adapt based on content */
+    gap: 15px; /* Increase space between grid items */
+    padding: 10px; /* Padding inside the container */
+    box-sizing: border-box; /* Include padding and border in element's total width and height */
+    overflow-y: auto; /* Vertical scroll if content exceeds viewport height */
+    overflow-x: hidden; /* Hide horizontal overflow */
+    visibility: hidden;
+    z-index: 4;
+}
+
+
+/* Style for the scrollbar itself */
+#courses::-webkit-scrollbar {
+    width: 12px; /* Width of the scrollbar */
+}
+
+/* Style for the scrollbar thumb (the draggable part) */
+#courses::-webkit-scrollbar-thumb {
+    background-color: #40C9A2; /* Color of the scrollbar handle */
+    border-radius: 10px; /* Round the corners of the scrollbar handle */
+    border: 3px solid #2F9C95; /* Border around the scrollbar handle */
+}
+
+    /* Style for the scrollbar track (the area the thumb moves along) */
+#courses::-webkit-scrollbar-track {
+    background-color: #2F9C95; /* Background color of the scrollbar track */
+    border-radius: 0px; /* Round the corners of the scrollbar track */
+}
+
+
+
+.courseCard {
+    all: unset;
+    width: 224px;
+    height: 168px;
+    background-size: cover;
+    image-rendering: crisp-edges;
+    border: 3px solid rgb(255, 196, 0);
+    border-radius: 8px;
+    transform-origin: center;
+    transition: 0.3s ease;
+    box-sizing: border-box;
+}
+
+.courseCard:hover {
+    border: 3px solid rgb(200, 155, 0);
+    transform: scale(1.05);
+}
+
+#lapCounterContainer {
+    right: 0;
+    padding: 24px;
+    z-index: 5;
+    position: fixed;
+    image-rendering: pixelated;
+    object-fit: contain;
+}
+
+#lapCounter {
+    height: 6vh;
+    width: auto;
+    visibility: hidden;
+    transition: opacity 1s ease-in-out;
+}
