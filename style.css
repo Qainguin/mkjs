@@ -2,10 +2,6 @@
     --checker: rgba(255,255,255, 0.3);
 }
 
-body {
-    overflow: hidden;
-}
-
 @font-face {
     font-family: "NDS";
     src: url("resource/NDS.ttf");
@@ -115,29 +111,4 @@ body {
     width: auto;
     visibility: hidden;
     transition: opacity 1s ease-in-out;
-}
-
-
-#dpad {
-    z-index: 100;
-    position: absolute;
-    left: 0vw; /* Left edge of the screen */
-    top: calc((418 / 640) * 100vh); /* Top position based on calculation */
-    width: calc((400 / 1136) * 100vw); /* Width based on calculation */
-    height: calc((222 / 640) * 100vh); /* Height based on calculation */
-    background: linear-gradient(to right, rgba(0, 255, 0, 0.3) 50%, rgba(255, 0, 0, 0.3) 50%); /* Green on the left, red on the right */
-    border: 2px solid #00ff00; /* Green border for visibility */
-    box-sizing: border-box; /* Ensure border doesn't cause overflow */
-}
-
-#drift {
-    z-index: 100;
-    position: absolute;
-    left: calc(780 / 1136 * 100vw); /* Calculated left position */
-    top: calc(468 / 640 * 100vh); /* Calculated top position */
-    width: calc(300 / 1136 * 100vw); /* Calculated width */
-    height: calc(125 / 640 * 100vh); /* Calculated height */
-    background-color: rgba(0, 0, 255, 0.3); /* Blue with some transparency */
-    border: 2px solid #0000ff; /* Blue border for visibility */
-    box-sizing: border-box; /* Ensure border doesn't cause overflow */
 }
