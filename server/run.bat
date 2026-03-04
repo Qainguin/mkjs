@@ -1,1 +1,2 @@
-node server.js
+@echo off
+bun run server.ts

@@ -1,0 +1,19 @@
+{
+  "name": "mkjs",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "bun --hot index.html",
+    "serve": "bun index.html",
+    "server": "bun run server/server.ts",
+    "typecheck": "bunx tsc --noEmit"
+  },
+  "dependencies": {
+    "ws": "^8.18.3"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.3",
+    "@types/ws": "^8.5.12",
+    "bun-types": "^1.2.0"
+  }
+}

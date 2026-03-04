@@ -1,4 +1,4 @@
 #!/bin/sh
 
-# just boots the server. nothing fancy right now.
-nodejs server.js
+# Boots the dedicated multiplayer server with Bun.
+bun run server.ts

@@ -43,3 +43,14 @@ The base game mostly works. A lot of the grunt work is done - the current setup 
 ![mkmulti](https://cloud.githubusercontent.com/assets/6294155/25496283/3c681532-2b78-11e7-86a1-9f710a9fae19.png)
 
 While multiplayer using a Websockets server is semi-functional, it is very simplistic and only exists for testing purposes. A future implementation would ideally connect to peers using WebRTC rather than connecting through a central server.
+
+## Running with Bun
+
+This repo is now wired for Bun-first development:
+
+- `bun install`
+- `bun run dev` to run the HTML entrypoint directly (hot-reload)
+- `bun run server` to run the multiplayer WebSocket server
+- `bun run typecheck` for TypeScript checks on the migrated TypeScript entry/server code
+
+The browser app entrypoint is `index.html`, which now loads a TypeScript ES module (`code/bootstrap.ts`) and then boots the legacy runtime scripts in-order.
